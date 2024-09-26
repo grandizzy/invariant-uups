@@ -1,24 +1,28 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.13;
 
-import {Test, console} from "forge-std/Test.sol";
-import {Counter} from "../src/Counter.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+
+import "forge-std/Test.sol";
+
+contract TestHandler is Test, UUPSUpgradeable {
+    function _authorizeUpgrade(address newImplementation) internal override {}
+
+    function fuzzHandler(address precompile) public {
+        vm.assume(precompile == address(0));
+    }
+}
 
 contract CounterTest is Test {
-    Counter public counter;
+    TestHandler public handler;
 
     function setUp() public {
-        counter = new Counter();
-        counter.setNumber(0);
+        address proxy = Upgrades.deployUUPSProxy(
+            "TestHandler.sol",
+            abi.encodeCall(TestHandler.initialize, (address(0)))
+        );
+        handler = TestHandler(proxy);
     }
 
-    function test_Increment() public {
-        counter.increment();
-        assertEq(counter.number(), 1);
-    }
-
-    function testFuzz_SetNumber(uint256 x) public {
-        counter.setNumber(x);
-        assertEq(counter.number(), x);
-    }
+    function invariant_assume() public {}
 }
