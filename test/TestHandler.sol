@@ -21,8 +21,9 @@ contract TestHandler is Test, Initializable, UUPSUpgradeable {
 
     function fuzzHandler(address addr, uint256 amount_) external {
         amount_ = _bound(amount_, 500001, type(uint256).max);
+        addr = _boundAddress(addr);
         vm.startPrank(msg.sender);
-        this.otherExternalFunction(amount_, _boundAddress(addr));
+        this.otherExternalFunction{value: 1000}(amount_, addr);
         vm.stopPrank();
         console.log("finished execution");
     }
@@ -36,7 +37,7 @@ contract TestHandler is Test, Initializable, UUPSUpgradeable {
         return addr;
     }
 
-    function otherExternalFunction(uint256 amount_, address addr) external {
+    function otherExternalFunction(uint256 amount_, address addr) external payable {
         amount = amount_;
         test = addr;
     }
