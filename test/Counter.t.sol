@@ -23,8 +23,13 @@ contract CounterTest is Test {
 
         targetContract(address(proxy));
 
-        targetSender(makeAddr("alice"));
-        targetSender(makeAddr("bob"));
+        address alice = makeAddr("alice");
+        address bob = makeAddr("bob");
+        vm.deal(alice, 100 ether);
+        vm.deal(bob, 100 ether);
+
+        targetSender(alice);
+        targetSender(bob);
     }
 
     function invariant_assume() public view {
