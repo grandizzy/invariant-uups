@@ -3,21 +3,10 @@ ffi = true
 src = "src"
 out = "out"
 libs = ["lib"]
-solc_version = "0.8.26"
-evm_version = "cancun"
 ast = true
 build_info = true
-optimizer = true
-optimizer_runs = 20_000
 gas_reports = ["*"]
 extra_output = ["storageLayout"]
-ignored_error_codes = [
-    "code-size",
-    "init-code-size",
-    "license",
-    "too-many-warnings",
-    "transient-storage",
-]
 
 [profile.default.invariant]
 fail_on_revert = true
