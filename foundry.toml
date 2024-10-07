@@ -5,9 +5,11 @@ out = "out"
 libs = ["lib"]
 ast = true
 build_info = true
+gas_reports = ["*"]
 extra_output = ["storageLayout"]
-fs_permissions = [{ access = "read-write", path = "./"}]
 
-# See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options
-[invariant]
+[profile.default.invariant]
 fail_on_revert = true
+runs = 10_000
+depth = 15
+dictionary_weight = 80
